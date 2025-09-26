@@ -8,6 +8,7 @@ __pycache__/
 .env
 frontend.env
 backend.env
+frontend/corp-root-ca.crt
 backend/corp-root-ca.crt
 env/
 venv/
