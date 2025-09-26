@@ -18,18 +18,13 @@ function App() {
     .filter(([key, value]) => !value)
     .map(([key]) => key);
 
-  if (missingVars.length > 0) {
-    return (
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <h2>Configuration Error</h2>
-        <p>Missing required environment variables: {missingVars.join(', ')}</p>
-        <p>Please check your frontend/.env file and ensure all required variables are set.</p>
-      </div>
-    );
-  }
-
   // Check if we're returning from PingOne with an authorization code
   useEffect(() => {
+    // Only proceed if environment variables are available
+    if (missingVars.length > 0) {
+      return;
+    }
+
     // Check if we're on the callback route
     if (window.location.pathname === '/callback') {
       const urlParams = new URLSearchParams(window.location.search);
@@ -46,7 +41,7 @@ function App() {
         handleCallback(code, state);
       }
     }
-  }, []);
+  }, [missingVars]);
 
   const handleCallback = async (code, state) => {
     setLoading(true);
@@ -159,6 +154,17 @@ function App() {
       setLoading(false);
     }
   };
+
+  // Check for missing environment variables
+  if (missingVars.length > 0) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>Configuration Error</h2>
+        <p>Missing required environment variables: {missingVars.join(', ')}</p>
+        <p>Please check your frontend/.env file and ensure all required variables are set.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
