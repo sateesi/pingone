@@ -1,0 +1,16 @@
+{
+  "name": "pingone-sso-demo",
+  "version": "1.0.0",
+  "description": "Minimal SSO demo with PingOne using Authorization Code + PKCE flow",
+  "scripts": {
+    "dev": "concurrently \"npm run frontend:dev\" \"npm run backend:dev\"",
+    "frontend:dev": "cd frontend && npm run dev",
+    "backend:dev": "cd backend && python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000",
+    "frontend:build": "cd frontend && npm run build",
+    "frontend:install": "cd frontend && npm install",
+    "backend:install": "cd backend && pip install -r requirements.txt"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
