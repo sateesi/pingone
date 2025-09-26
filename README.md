@@ -25,6 +25,8 @@ copy env.example .env
 copy frontend\env.example frontend\.env
 ```
 
+**⚠️ Important**: All environment variables are now required. The application will fail to start if any required variables are missing.
+
 Update the following in both `.env` and `frontend\.env`:
 - `PINGONE_CLIENT_ID` - Your PingOne application client ID
 - `PINGONE_CLIENT_SECRET` - Your PingOne application client secret

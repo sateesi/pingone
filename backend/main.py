@@ -18,10 +18,23 @@ if os.getenv("SSL_VERIFY", "True").lower() == "false":
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Configuration from environment variables
-PINGONE_ISSUER = os.getenv("PINGONE_ISSUER", "https://auth.pingone.sg/1b8fa467-e41d-402a-8702-990c92c1f89b/as")
-PINGONE_CLIENT_ID = os.getenv("PINGONE_CLIENT_ID", "d388aebf-7971-4acb-b9b0-6211a4931ed8")
-PINGONE_CLIENT_SECRET = os.getenv("PINGONE_CLIENT_SECRET", "j8j4hVhRlAVbXc0pxuD-eNxR6~.O5W-zskvJVms8hGpw6wVGb73.dQtECr3n8MOD")
-PINGONE_REDIRECT_URI = os.getenv("PINGONE_REDIRECT_URI", "http://localhost:3000/callback")
+PINGONE_ISSUER = os.getenv("PINGONE_ISSUER")
+PINGONE_CLIENT_ID = os.getenv("PINGONE_CLIENT_ID")
+PINGONE_CLIENT_SECRET = os.getenv("PINGONE_CLIENT_SECRET")
+PINGONE_REDIRECT_URI = os.getenv("PINGONE_REDIRECT_URI")
+
+# Validate required environment variables
+required_vars = {
+    "PINGONE_ISSUER": PINGONE_ISSUER,
+    "PINGONE_CLIENT_ID": PINGONE_CLIENT_ID,
+    "PINGONE_CLIENT_SECRET": PINGONE_CLIENT_SECRET,
+    "PINGONE_REDIRECT_URI": PINGONE_REDIRECT_URI
+}
+
+missing_vars = [var for var, value in required_vars.items() if not value]
+if missing_vars:
+    raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}. Please check your .env file.")
+
 PINGONE_TOKEN_URL = f"{PINGONE_ISSUER}/token"
 PINGONE_JWKS_URL = f"{PINGONE_ISSUER}/jwks"
 

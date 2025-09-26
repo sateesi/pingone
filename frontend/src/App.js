@@ -6,6 +6,28 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Validate required environment variables
+  const requiredEnvVars = {
+    'REACT_APP_PINGONE_AUTH_URL': process.env.REACT_APP_PINGONE_AUTH_URL,
+    'REACT_APP_PINGONE_CLIENT_ID': process.env.REACT_APP_PINGONE_CLIENT_ID,
+    'REACT_APP_PINGONE_REDIRECT_URI': process.env.REACT_APP_PINGONE_REDIRECT_URI,
+    'REACT_APP_BACKEND_URL': process.env.REACT_APP_BACKEND_URL
+  };
+
+  const missingVars = Object.entries(requiredEnvVars)
+    .filter(([key, value]) => !value)
+    .map(([key]) => key);
+
+  if (missingVars.length > 0) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>Configuration Error</h2>
+        <p>Missing required environment variables: {missingVars.join(', ')}</p>
+        <p>Please check your frontend/.env file and ensure all required variables are set.</p>
+      </div>
+    );
+  }
+
   // Check if we're returning from PingOne with an authorization code
   useEffect(() => {
     // Check if we're on the callback route
@@ -38,7 +60,7 @@ function App() {
       }
 
       // Exchange authorization code for tokens
-      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+      const backendUrl = process.env.REACT_APP_BACKEND_URL;
       const response = await axios.post(`${backendUrl}/api/auth/callback`, {
         code,
         state,
@@ -117,10 +139,10 @@ function App() {
       sessionStorage.setItem('pkce_code_verifier', codeVerifier);
       sessionStorage.setItem('oauth_state', state);
 
-      const authUrl = new URL(process.env.REACT_APP_PINGONE_AUTH_URL || 'https://auth.pingone.sg/1b8fa467-e41d-402a-8702-990c92c1f89b/as/authorize');
+      const authUrl = new URL(process.env.REACT_APP_PINGONE_AUTH_URL);
       authUrl.searchParams.set('response_type', 'code');
-      authUrl.searchParams.set('client_id', process.env.REACT_APP_PINGONE_CLIENT_ID || 'd388aebf-7971-4acb-b9b0-6211a4931ed8');
-      authUrl.searchParams.set('redirect_uri', process.env.REACT_APP_PINGONE_REDIRECT_URI || 'http://localhost:3000/callback');
+      authUrl.searchParams.set('client_id', process.env.REACT_APP_PINGONE_CLIENT_ID);
+      authUrl.searchParams.set('redirect_uri', process.env.REACT_APP_PINGONE_REDIRECT_URI);
       authUrl.searchParams.set('scope', 'openid profile email');
       authUrl.searchParams.set('code_challenge', codeChallenge);
       authUrl.searchParams.set('code_challenge_method', 'S256');

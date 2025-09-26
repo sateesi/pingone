@@ -145,7 +145,25 @@ npm error A complete log of this run can be found in: /root/.npm/_logs/...
 - Removed unnecessary dependencies
 - Optimized Dockerfile for faster builds
 
-### 8. Port Already in Use
+### 8. Missing Environment Variables
+
+**Error Message:**
+```
+Missing required environment variables: PINGONE_CLIENT_ID, PINGONE_ISSUER
+ValueError: Missing required environment variables: PINGONE_CLIENT_ID, PINGONE_ISSUER. Please check your .env file.
+```
+
+**Solution:**
+1. Create environment files from templates:
+   ```bash
+   copy env.example .env
+   copy frontend\env.example frontend\.env
+   ```
+2. Update all required variables in both files
+3. Ensure no variables are empty or commented out
+4. Restart the application
+
+### 9. Port Already in Use
 
 **Error Message:**
 ```
